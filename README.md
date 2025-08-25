@@ -4,7 +4,7 @@ A thrilling browser-based game where you control an airplane to avoid falling sq
 
 ## 🚀 Live Demo
 
-[Play the Game Online]([https://jacoo-zhao.github.io/falling-game](https://jacoo-zhao.github.io/Falling-Game/))
+[Play the Game Online](https://jacoo-zhao.github.io/Falling-Game/)
 
 ## 🎯 Game Features
 
