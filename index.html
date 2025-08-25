@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falling Squares Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Falling Squares Game</h1>
+        <div class="game-info">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="instructions">Move your mouse to control the airplane! Avoid falling squares and the enemy plane! Difficulty increases every 3 seconds!</div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div class="game-controls">
+            <button id="startButton" onclick="startGame()">Start Game</button>
+            <button id="restartButton" onclick="restartGame()" style="display: none;">Restart Game</button>
+        </div>
+        <div id="gameOverScreen" class="game-over" style="display: none;">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <button onclick="restartGame()">Play Again</button>
+            </div>
+        </div>
+    
+    <!-- 加载脚本 -->
+    <script src="script.js"></script>
+</body>
+</html>

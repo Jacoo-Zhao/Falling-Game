@@ -1,0 +1,207 @@
+/* Falling Squares Game Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 0 10px;
+}
+
+.score {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4ecdc4;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.instructions {
+    font-size: 1em;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+#gameCanvas {
+    border: 3px solid #ffffff;
+    border-radius: 10px;
+    background: #000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    margin: 10px 0;
+    cursor: none; /* 隐藏鼠标光标，让飞机成为光标 */
+    transition: border-color 0.3s ease;
+}
+
+#gameCanvas:hover {
+    border-color: #4ecdc4;
+    box-shadow: 0 4px 20px rgba(78, 205, 196, 0.3);
+}
+
+.game-controls {
+    margin: 20px 0;
+}
+
+button {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 2px solid #ff6b6b;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+.game-over h2 {
+    font-size: 2.5em;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.game-over p {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #4ecdc4;
+}
+
+/* 难度提升动画 */
+@keyframes pulseAlert {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* 游戏画布在高难度下的视觉效果 */
+#gameCanvas.high-difficulty {
+    animation: subtleShake 0.1s infinite;
+    border-color: #ff6b6b;
+    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+}
+
+@keyframes subtleShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-1px); }
+    75% { transform: translateX(1px); }
+}
+
+/* 分数显示的动画效果 */
+.score {
+    transition: all 0.3s ease;
+}
+
+.score.difficulty-change {
+    animation: scoreGlow 0.5s ease;
+}
+
+@keyframes scoreGlow {
+    0%, 100% {
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        transform: scale(1);
+    }
+    50% {
+        text-shadow: 0 0 10px #4ecdc4, 0 0 20px #4ecdc4;
+        transform: scale(1.05);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 15px;
+        margin: 10px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        max-width: 400px;
+        height: 300px;
+    }
+    
+    .game-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .instructions {
+        font-size: 0.9em;
+    }
+    
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
