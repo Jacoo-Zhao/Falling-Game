@@ -7,7 +7,7 @@ class Game {
         this.score = 0;
         this.gameSpeed = 2;
         this.difficultyLevel = 1;
-        this.gameTime = 0; // 游戏时间（秒）
+        this.gameTime = 0; // Game time (seconds)
         
         // Player airplane
         this.player = {
@@ -19,22 +19,22 @@ class Game {
             color: '#4ecdc4',
             targetX: this.canvas.width / 2,
             targetY: this.canvas.height - 50,
-            smoothness: 0.15 // 鼠标跟随的平滑度
+            smoothness: 0.3 // Mouse following smoothness
         };
         
         // Falling squares
         this.squares = [];
-        this.baseSpawnRate =0.05; // 基础生成率
+        this.baseSpawnRate =0.05; // Base spawn rate
         this.squareSpawnRate = this.baseSpawnRate;
         this.maxSquareSpeed = 2;
         this.minSquareSize = 20;
         this.maxSquareSize = 50;
         
-        // 飞机轨迹效果
+        // Airplane trail effect
         this.trail = [];
         this.maxTrailLength = 10;
         
-        // 敌方飞机
+        // Enemy plane
         this.enemyPlane = {
             x: this.canvas.width / 4,
             y: 50,
@@ -44,8 +44,8 @@ class Game {
             color: '#ff6b6b',
             isActive: false,
             trail: [],
-            angle: 0, // 朝向角度
-            targetAngle: 0 // 目标角度
+            angle: 0, // Facing angle
+            targetAngle: 0 // Target angle
         };
         
         // Input handling
@@ -58,7 +58,7 @@ class Game {
     }
     
     setupEventListeners() {
-        // Keyboard input (保留键盘控制作为备选)
+        // Keyboard input (keep keyboard control as backup)
         document.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
         });
@@ -81,7 +81,7 @@ class Game {
                 this.player.targetX = e.clientX - rect.left;
                 this.player.targetY = e.clientY - rect.top;
                 
-                // 限制飞机在画布范围内
+                // Limit airplane within canvas bounds
                 this.player.targetX = Math.max(this.player.width/2, 
                     Math.min(this.canvas.width - this.player.width/2, this.player.targetX));
                 this.player.targetY = Math.max(this.player.height/2, 
@@ -89,7 +89,7 @@ class Game {
             }
         });
         
-        // 触摸设备支持
+        // Touch device support
         this.canvas.addEventListener('touchmove', (e) => {
             if (this.isRunning) {
                 e.preventDefault();
@@ -98,7 +98,7 @@ class Game {
                 this.player.targetX = touch.clientX - rect.left;
                 this.player.targetY = touch.clientY - rect.top;
                 
-                // 限制飞机在画布范围内
+                // Limit airplane within canvas bounds
                 this.player.targetX = Math.max(this.player.width/2, 
                     Math.min(this.canvas.width - this.player.width/2, this.player.targetX));
                 this.player.targetY = Math.max(this.player.height/2, 
@@ -113,24 +113,24 @@ class Game {
         this.gameTime = 0;
         this.difficultyLevel = 1;
         this.squares = [];
-        this.trail = []; // 重置轨迹
+        this.trail = []; // Reset trail
         this.player.x = this.canvas.width / 2;
         this.player.y = this.canvas.height - 50;
         this.player.targetX = this.canvas.width / 2;
         this.player.targetY = this.canvas.height - 50;
         this.gameSpeed = 2;
         this.squareSpawnRate = this.baseSpawnRate;
-        this.maxSquareSpeed = 2;
+        this.maxSquareSpeed = 4;
         this.lastFrameTime = performance.now();
         
-        // 重置敌方飞机
+        // Reset enemy plane
         this.enemyPlane.x = this.canvas.width / 4;
         this.enemyPlane.y = 50;
         this.enemyPlane.isActive = false;
         this.enemyPlane.trail = [];
         this.enemyPlane.angle = 0;
         
-        // 移除高难度视觉效果
+        // Remove high difficulty visual effects
         this.canvas.classList.remove('high-difficulty');
         
         // Hide start button, show restart button
@@ -157,7 +157,7 @@ class Game {
         if (!this.isRunning) return;
         
         const currentTime = performance.now();
-        const deltaTime = (currentTime - this.lastFrameTime) / 1000; // 转换为秒
+        const deltaTime = (currentTime - this.lastFrameTime) / 1000; // Convert to seconds
         this.lastFrameTime = currentTime;
         
         this.update(deltaTime);
@@ -167,10 +167,10 @@ class Game {
     }
     
     update(deltaTime) {
-        // 更新游戏时间
+        // Update game time
         this.gameTime += deltaTime;
         
-        // 更新难度
+        // Update difficulty
         this.updateDifficulty();
         
         // Update player position
@@ -192,21 +192,21 @@ class Game {
         this.score += 1;
         
         // Update score display
-        document.getElementById('score').textContent = `${this.score} | 难度: ${this.difficultyLevel} | 时间: ${Math.floor(this.gameTime)}s`;
+        document.getElementById('score').textContent = `${this.score} | Difficulty: ${this.difficultyLevel} | Time: ${Math.floor(this.gameTime)}s`;
     }
     
     updateDifficulty() {
-        // 每5秒提升一次难度
+        // Increase difficulty every 5 seconds
         const newDifficultyLevel = Math.floor(this.gameTime / 3) + 1;
         
         if (newDifficultyLevel !== this.difficultyLevel) {
             this.difficultyLevel = newDifficultyLevel;
-            console.log(`难度提升到 ${this.difficultyLevel} 级！`);
+            console.log(`Difficulty increased to level ${this.difficultyLevel}!`);
             
-            // 创建难度提升提示
+            // Create difficulty increase notification
             this.showDifficultyIncrease();
             
-            // 特殊提示：敌方飞机出现
+            // Special notification: Enemy plane appears
             if (this.difficultyLevel === 2) {
                 setTimeout(() => {
                     this.showEnemyWarning();
@@ -214,18 +214,18 @@ class Game {
             }
         }
         
-        // 根据难度调整游戏参数
-        this.squareSpawnRate = this.baseSpawnRate + (this.difficultyLevel - 1) * 0.008; // 生成率递增
-        this.maxSquareSpeed = 2 + (this.difficultyLevel - 1) * 0.5; // 速度递增
-        this.gameSpeed = 2 + (this.difficultyLevel - 1) * 0.3; // 基础速度递增
+        // Adjust game parameters based on difficulty
+        this.squareSpawnRate = this.baseSpawnRate + (this.difficultyLevel - 1) * 0.008; // Spawn rate increases
+        this.maxSquareSpeed = 2 + (this.difficultyLevel - 1) * 0.5; // Speed increases
+        this.gameSpeed = 2 + (this.difficultyLevel - 1) * 0.3; // Base speed increases
         
-        // 2级难度后激活敌方飞机
+        // Activate enemy plane after difficulty level 2
         if (this.difficultyLevel >= 2) {
             this.enemyPlane.isActive = true;
-            this.enemyPlane.speed = 2 + (this.difficultyLevel - 2) * 0.5; // 敌机速度递增
+            this.enemyPlane.speed = 2 + (this.difficultyLevel - 2) * 0.5; // Enemy plane speed increases
         }
         
-        // 5级难度后，方块开始变小（更难躲避）
+        // After difficulty level 5, squares become smaller (harder to avoid)
         if (this.difficultyLevel >= 5) {
             this.minSquareSize = Math.max(15, 20 - (this.difficultyLevel - 5) * 2);
             this.maxSquareSize = Math.max(25, 50 - (this.difficultyLevel - 5) * 3);
@@ -233,7 +233,7 @@ class Game {
     }
     
     showDifficultyIncrease() {
-        // 在画面上显示难度提升提示
+        // Display difficulty increase notification on screen
         const message = document.createElement('div');
         message.style.cssText = `
             position: fixed;
@@ -251,15 +251,15 @@ class Game {
             border: 2px solid #ff6b6b;
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         `;
-        message.textContent = `难度提升到 ${this.difficultyLevel} 级！`;
+        message.textContent = `Difficulty increased to level ${this.difficultyLevel}!`;
         document.body.appendChild(message);
         
-        // 添加画布震动效果（高难度下）
+        // Add canvas shake effect (at high difficulty)
         if (this.difficultyLevel >= 3) {
             this.canvas.classList.add('high-difficulty');
         }
         
-        // 添加分数发光效果
+        // Add score glow effect
         const scoreElement = document.querySelector('.score');
         scoreElement.classList.add('difficulty-change');
         setTimeout(() => scoreElement.classList.remove('difficulty-change'), 500);
@@ -268,7 +268,7 @@ class Game {
     }
     
     showEnemyWarning() {
-        // 敌方飞机出现警告
+        // Enemy plane appearance warning
         const warning = document.createElement('div');
         warning.style.cssText = `
             position: fixed;
@@ -297,75 +297,75 @@ class Game {
     }
     
     updatePlayer() {
-        // 记录当前位置到轨迹
+        // Record current position to trail
         this.trail.push({ x: this.player.x, y: this.player.y });
         if (this.trail.length > this.maxTrailLength) {
             this.trail.shift();
         }
         
-        // 平滑鼠标跟随
+        // Smooth mouse following
         const dx = this.player.targetX - this.player.x;
         const dy = this.player.targetY - this.player.y;
         
         this.player.x += dx * this.player.smoothness;
         this.player.y += dy * this.player.smoothness;
         
-        // 键盘控制作为备选（可选）
+        // Keyboard control as backup (optional)
         if (this.keys['ArrowLeft'] && this.player.x - this.player.width/2 > 0) {
             this.player.x -= this.player.speed;
-            this.player.targetX = this.player.x; // 同步目标位置
+            this.player.targetX = this.player.x; // Sync target position
         }
         if (this.keys['ArrowRight'] && this.player.x + this.player.width/2 < this.canvas.width) {
             this.player.x += this.player.speed;
-            this.player.targetX = this.player.x; // 同步目标位置
+            this.player.targetX = this.player.x; // Sync target position
         }
         if (this.keys['ArrowUp'] && this.player.y - this.player.height/2 > 0) {
             this.player.y -= this.player.speed;
-            this.player.targetY = this.player.y; // 同步目标位置
+            this.player.targetY = this.player.y; // Sync target position
         }
         if (this.keys['ArrowDown'] && this.player.y + this.player.height/2 < this.canvas.height) {
             this.player.y += this.player.speed;
-            this.player.targetY = this.player.y; // 同步目标位置
+            this.player.targetY = this.player.y; // Sync target position
         }
     }
     
     updateEnemyPlane() {
         if (!this.enemyPlane.isActive) return;
         
-        // 记录敌机轨迹
+        // Record enemy plane trail
         this.enemyPlane.trail.push({ x: this.enemyPlane.x, y: this.enemyPlane.y });
         if (this.enemyPlane.trail.length > 8) {
             this.enemyPlane.trail.shift();
         }
         
-        // 计算到玩家的距离和角度
+        // Calculate distance and angle to player
         const dx = this.player.x - this.enemyPlane.x;
         const dy = this.player.y - this.enemyPlane.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        // 计算目标角度
+        // Calculate target angle
         this.enemyPlane.targetAngle = Math.atan2(dy, dx);
         
-        // 平滑旋转朝向
+        // Smooth rotation towards target
         let angleDiff = this.enemyPlane.targetAngle - this.enemyPlane.angle;
         if (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
         if (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
         this.enemyPlane.angle += angleDiff * 0.1;
         
-        // 追逐玩家但保持一定距离
+        // Chase player but maintain certain distance
         if (distance > 100) {
-            // 直接追逐
+            // Direct chase
             this.enemyPlane.x += Math.cos(this.enemyPlane.angle) * this.enemyPlane.speed;
             this.enemyPlane.y += Math.sin(this.enemyPlane.angle) * this.enemyPlane.speed;
         } else {
-            // 保持距离，做圆周运动
+            // Maintain distance, circular movement
             const circleSpeed = this.enemyPlane.speed * 0.7;
             const circleAngle = this.enemyPlane.angle + Math.PI / 2;
             this.enemyPlane.x += Math.cos(circleAngle) * circleSpeed;
             this.enemyPlane.y += Math.sin(circleAngle) * circleSpeed;
         }
         
-        // 边界检查
+        // Boundary check
         this.enemyPlane.x = Math.max(this.enemyPlane.width/2, 
             Math.min(this.canvas.width - this.enemyPlane.width/2, this.enemyPlane.x));
         this.enemyPlane.y = Math.max(this.enemyPlane.height/2, 
@@ -383,7 +383,7 @@ class Game {
                 height: size,
                 speed: this.gameSpeed + Math.random() * this.maxSquareSpeed,
                 color: this.getRandomColor(),
-                // 高难度下添加特殊效果
+                // Add special effects at high difficulty
                 isSpecial: this.difficultyLevel >= 3 && Math.random() < 0.1,
                 rotation: 0,
                 rotationSpeed: (Math.random() - 0.5) * 0.2
@@ -397,15 +397,15 @@ class Game {
         this.squares = this.squares.filter(square => {
             square.y += square.speed;
             
-            // 旋转特殊方块
+            // Rotate special squares
             if (square.isSpecial) {
                 square.rotation += square.rotationSpeed;
             }
             
-            // 高难度下的横向移动
+            // Horizontal movement at high difficulty
             if (this.difficultyLevel >= 4 && square.isSpecial) {
                 square.x += Math.sin(square.y * 0.01) * 2;
-                // 保持在画面内
+                // Keep within screen bounds
                 square.x = Math.max(0, Math.min(this.canvas.width - square.width, square.x));
             }
             
@@ -414,7 +414,7 @@ class Game {
     }
     
     checkCollisions() {
-        // 检查玩家与方块的碰撞
+        // Check collision between player and squares
         for (let square of this.squares) {
             if (this.rectRectCollision(this.player, square)) {
                 this.gameOver();
@@ -422,7 +422,7 @@ class Game {
             }
         }
         
-        // 检查玩家与敌方飞机的碰撞
+        // Check collision between player and enemy plane
         if (this.enemyPlane.isActive && this.rectRectCollision(this.player, this.enemyPlane)) {
             this.gameOver();
             return;
@@ -430,7 +430,7 @@ class Game {
     }
     
     rectRectCollision(airplane, square) {
-        // 矩形碰撞检测 (使用稍小的碰撞箱让游戏更公平)
+        // Rectangle collision detection (use slightly smaller collision box for fairness)
         const airplaneLeft = airplane.x - airplane.width/2 + 5;
         const airplaneRight = airplane.x + airplane.width/2 - 5;
         const airplaneTop = airplane.y - airplane.height/2 + 5;
@@ -497,35 +497,35 @@ class Game {
         const width = this.player.width;
         const height = this.player.height;
         
-        // 飞机发光效果
+        // Airplane glow effect
         this.ctx.shadowColor = this.player.color;
         this.ctx.shadowBlur = 15;
         
-        // 绘制飞机主体
+        // Draw airplane body
         this.ctx.fillStyle = this.player.color;
         this.ctx.beginPath();
         
-        // 飞机机身 (主体三角形)
-        this.ctx.moveTo(x, y - height/2); // 机头
-        this.ctx.lineTo(x - width/4, y + height/2); // 左下
-        this.ctx.lineTo(x + width/4, y + height/2); // 右下
+        // Airplane fuselage (main triangle)
+        this.ctx.moveTo(x, y - height/2); // Nose
+        this.ctx.lineTo(x - width/4, y + height/2); // Bottom left
+        this.ctx.lineTo(x + width/4, y + height/2); // Bottom right
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 关闭阴影效果绘制细节
+        // Turn off shadow effect for drawing details
         this.ctx.shadowBlur = 0;
         
-        // 飞机机翼
+        // Airplane wings
         this.ctx.fillStyle = this.player.color;
         this.ctx.beginPath();
-        // 左机翼
+        // Left wing
         this.ctx.moveTo(x - width/4, y);
         this.ctx.lineTo(x - width/2, y + height/4);
         this.ctx.lineTo(x - width/6, y + height/4);
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 右机翼
+        // Right wing
         this.ctx.beginPath();
         this.ctx.moveTo(x + width/4, y);
         this.ctx.lineTo(x + width/2, y + height/4);
@@ -533,13 +533,13 @@ class Game {
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 飞机座舱（白色）
+        // Airplane cockpit (white)
         this.ctx.fillStyle = '#ffffff';
         this.ctx.beginPath();
         this.ctx.ellipse(x, y - height/6, width/8, height/8, 0, 0, Math.PI * 2);
         this.ctx.fill();
         
-        // 飞机喷射尾焰效果
+        // Airplane jet flame effect
         const flameLength = 15 + Math.sin(Date.now() * 0.02) * 5;
         const gradient = this.ctx.createLinearGradient(x, y + height/2, x, y + height/2 + flameLength);
         gradient.addColorStop(0, '#ff6b6b');
@@ -554,7 +554,7 @@ class Game {
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 飞机轮廓线
+        // Airplane outline
         this.ctx.strokeStyle = '#ffffff';
         this.ctx.lineWidth = 2;
         this.ctx.beginPath();
@@ -620,37 +620,37 @@ class Game {
         const height = this.enemyPlane.height;
         const angle = this.enemyPlane.angle;
         
-        // 移动到飞机中心并旋转
+        // Move to plane center and rotate
         this.ctx.translate(x, y);
         this.ctx.rotate(angle);
         
-        // 敌机发光效果（红色）
+        // Enemy plane glow effect (red)
         this.ctx.shadowColor = this.enemyPlane.color;
         this.ctx.shadowBlur = 12;
         
-        // 绘制敌机主体（倒三角形，机头朝前）
+        // Draw enemy plane body (inverted triangle, nose forward)
         this.ctx.fillStyle = this.enemyPlane.color;
         this.ctx.beginPath();
-        this.ctx.moveTo(width/2, 0); // 机头
-        this.ctx.lineTo(-width/4, -height/2); // 左上
-        this.ctx.lineTo(-width/4, height/2); // 左下
+        this.ctx.moveTo(width/2, 0); // Nose
+        this.ctx.lineTo(-width/4, -height/2); // Top left
+        this.ctx.lineTo(-width/4, height/2); // Bottom left
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 关闭阴影效果绘制细节
+        // Turn off shadow effect for drawing details
         this.ctx.shadowBlur = 0;
         
-        // 敌机机翼
+        // Enemy plane wings
         this.ctx.fillStyle = this.enemyPlane.color;
         this.ctx.beginPath();
-        // 上机翼
+        // Top wing
         this.ctx.moveTo(0, -height/4);
         this.ctx.lineTo(-width/3, -height/2);
         this.ctx.lineTo(-width/6, -height/3);
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 下机翼
+        // Bottom wing
         this.ctx.beginPath();
         this.ctx.moveTo(0, height/4);
         this.ctx.lineTo(-width/3, height/2);
@@ -658,13 +658,13 @@ class Game {
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 敌机座舱（暗红色）
+        // Enemy plane cockpit (dark red)
         this.ctx.fillStyle = '#aa0000';
         this.ctx.beginPath();
         this.ctx.ellipse(width/6, 0, width/10, height/10, 0, 0, Math.PI * 2);
         this.ctx.fill();
         
-        // 敌机喷射尾焰（蓝色）
+        // Enemy plane jet flame (blue)
         const flameLength = 12 + Math.sin(Date.now() * 0.025) * 4;
         const gradient = this.ctx.createLinearGradient(-width/4, 0, -width/4 - flameLength, 0);
         gradient.addColorStop(0, '#0088ff');
@@ -679,7 +679,7 @@ class Game {
         this.ctx.closePath();
         this.ctx.fill();
         
-        // 敌机轮廓线
+        // Enemy plane outline
         this.ctx.strokeStyle = '#ffffff';
         this.ctx.lineWidth = 1.5;
         this.ctx.beginPath();
@@ -696,39 +696,39 @@ class Game {
         this.squares.forEach(square => {
             this.ctx.save();
             
-            // 特殊方块的额外效果
+            // Additional effects for special squares
             if (square.isSpecial) {
                 this.ctx.translate(square.x + square.width/2, square.y + square.height/2);
                 this.ctx.rotate(square.rotation);
                 this.ctx.translate(-square.width/2, -square.height/2);
                 
-                // 特殊方块有更强的发光效果
+                // Special squares have stronger glow effect
                 this.ctx.shadowColor = square.color;
                 this.ctx.shadowBlur = 20;
                 
-                // 特殊方块颜色更亮
+                // Special squares have brighter colors
                 this.ctx.fillStyle = square.color;
                 this.ctx.fillRect(0, 0, square.width, square.height);
                 
-                // 内部闪烁效果
+                // Internal flashing effect
                 this.ctx.shadowBlur = 0;
                 this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
                 const pulseSize = Math.sin(Date.now() * 0.01) * 5 + 5;
                 this.ctx.fillRect(pulseSize, pulseSize, square.width - pulseSize*2, square.height - pulseSize*2);
                 
-                // 特殊边框
+                // Special border
                 this.ctx.strokeStyle = '#ffffff';
                 this.ctx.lineWidth = 3;
                 this.ctx.strokeRect(0, 0, square.width, square.height);
             } else {
-                // 普通方块
+                // Normal squares
                 this.ctx.shadowColor = square.color;
                 this.ctx.shadowBlur = 10;
                 
                 this.ctx.fillStyle = square.color;
                 this.ctx.fillRect(square.x, square.y, square.width, square.height);
                 
-                // 普通边框
+                // Normal border
                 this.ctx.shadowBlur = 0;
                 this.ctx.strokeStyle = '#ffffff';
                 this.ctx.lineWidth = 2;

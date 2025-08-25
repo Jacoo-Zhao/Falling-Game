@@ -62,7 +62,7 @@ h1 {
     background: #000;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     margin: 10px 0;
-    cursor: none; /* 隐藏鼠标光标，让飞机成为光标 */
+    cursor: none; /* Hide mouse cursor, let airplane become the cursor */
     transition: border-color 0.3s ease;
 }
 
@@ -125,7 +125,7 @@ button:active {
     color: #4ecdc4;
 }
 
-/* 难度提升动画 */
+/* Difficulty increase animation */
 @keyframes pulseAlert {
     0% {
         transform: translate(-50%, -50%) scale(0.8);
@@ -141,7 +141,7 @@ button:active {
     }
 }
 
-/* 游戏画布在高难度下的视觉效果 */
+/* Game canvas visual effects at high difficulty */
 #gameCanvas.high-difficulty {
     animation: subtleShake 0.1s infinite;
     border-color: #ff6b6b;
@@ -154,7 +154,7 @@ button:active {
     75% { transform: translateX(1px); }
 }
 
-/* 分数显示的动画效果 */
+/* Score display animation effects */
 .score {
     transition: all 0.3s ease;
 }

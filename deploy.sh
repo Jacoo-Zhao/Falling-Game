@@ -1,46 +1,46 @@
 #!/bin/bash
 
-# 落下方块游戏 - 快速部署脚本
+# Falling Squares Game - Quick Deployment Script
 # Falling Squares Game - Quick Deployment Script
 
-echo "🎮 准备部署落下方块游戏..."
+echo "🎮 Preparing to deploy Falling Squares Game..."
 echo "🎮 Preparing to deploy Falling Squares Game..."
 
-# 检查是否已初始化git
+# Check if git is already initialized
 if [ ! -d ".git" ]; then
-    echo "📁 初始化Git仓库..."
+    echo "📁 Initializing Git repository..."
     git init
     git add .
     git commit -m "Initial commit: Falling Squares Game"
-    echo "✅ Git仓库已初始化"
+    echo "✅ Git repository initialized"
     
     echo ""
-    echo "🔗 请按以下步骤完成部署："
-    echo "1. 在GitHub上创建新仓库"
-    echo "2. 复制仓库URL"
-    echo "3. 运行以下命令："
+    echo "🔗 Please follow these steps to complete deployment:"
+    echo "1. Create a new repository on GitHub"
+    echo "2. Copy the repository URL"
+    echo "3. Run the following commands:"
     echo ""
     echo "   git remote add origin YOUR_REPO_URL"
     echo "   git branch -M main"
     echo "   git push -u origin main"
     echo ""
-    echo "4. 在GitHub仓库设置中启用Pages"
-    echo "5. 选择main分支作为源"
+    echo "4. Enable Pages in GitHub repository settings"
+    echo "5. Select main branch as source"
     echo ""
 else
-    echo "📤 推送到GitHub..."
+    echo "📤 Pushing to GitHub..."
     git add .
     git commit -m "Update: $(date '+%Y-%m-%d %H:%M:%S')"
     git push
-    echo "✅ 代码已推送到GitHub"
+    echo "✅ Code pushed to GitHub"
 fi
 
 echo ""
-echo "🌐 其他部署选项："
-echo "• Netlify: 拖拽文件夹到 netlify.com"
-echo "• Vercel: 连接GitHub仓库到 vercel.com"
-echo "• Surge: 运行 'npx surge' 命令"
+echo "🌐 Other deployment options:"
+echo "• Netlify: Drag and drop folder to netlify.com"
+echo "• Vercel: Connect GitHub repository to vercel.com"
+echo "• Surge: Run 'npx surge' command"
 echo ""
-echo "🎯 部署完成后，您的游戏将在几分钟内上线！"
-echo "🎮 享受您的落下方块游戏吧！"
+echo "🎯 After deployment, your game will be live in a few minutes!"
+echo "🎮 Enjoy your Falling Squares Game!"
 
