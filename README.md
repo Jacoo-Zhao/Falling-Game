@@ -4,7 +4,7 @@ A thrilling browser-based game where you control an airplane to avoid falling sq
 
 ## 🚀 Live Demo
 
-[Play the Game Online](https://your-username.github.io/falling-squares-game)
+[Play the Game Online](https://jacoo-zhao.github.io/falling-squares-game)
 
 ## 🎯 Game Features
 
